@@ -1,0 +1,221 @@
+<form action="/settings" method="post" class="form-horizontal" enctype="multipart/form-data">
+	<fieldset>	
+
+		<?php if(is_superadmin()): ?> 
+		<div class="form-group">
+			<label for="admin" class="col-sm-2 control-label">Logo bedrijf/organisatie</label>
+			<div class="col-sm-3">		
+				<input type="file" value="" name="logo" />
+				<?php $image = client_logo($this->client_id); ?>
+				<?php if(!empty($image)): ?>
+					<img src="<?php echo $image; ?>" alt="" style="display:block; max-width: 250px;" />
+				<?php endif; ?>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="admin" class="col-sm-2 control-label">Watermerk (600 pixels breed)</label>
+			<div class="col-sm-3">		
+				<input type="file" value="" name="watermark" />
+				<?php $watermark_img = custom_watermark($this->client_id); ?>
+				<?php if(empty($watermark_img)): ?>
+					<strong>Standaard ImageShare watermerk</strong>
+				<?php else: ?>
+					<div style="padding: 20px; background: #333;">
+						<img src="<?php echo str_replace(FCPATH, "/", $watermark_img['full']); ?>" alt="" style="display:block; max-width: 220px;" />
+					</div>
+				<?php endif; ?>
+			</div>
+		</div>
+		<?php endif; ?>
+	
+		<div class="form-group">
+			<label for="admin" class="col-sm-2 control-label">Registreren</label>
+			<div class="col-sm-3">		
+				<div class="radio"><label><input type="radio" value="1" name="allow_registration" <?php if($allow_registration): ?>checked<?php endif; ?> /> Ja</label></div>
+				<div class="radio"><label><input type="radio" value="0" name="allow_registration" <?php if(!$allow_registration): ?>checked<?php endif; ?> /> Nee</label></div>
+			</div>
+		</div>
+		
+		<div class="form-group<?php if($allow_registration == '0'): ?> hide<?php endif; ?>" id="terms">
+			<label for="terms" class="col-sm-2 control-label">Algemene voorwaarden</label>
+			<div class="col-sm-3">
+				<textarea rows="5" cols="auto" id="terms" name="terms" class="form-control"><?php echo $terms; ?></textarea>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="email" class="col-sm-2 control-label">Admin emailadres</label>
+			<div class="col-sm-3">
+				<input type="text" id="email" name="email" value="<?php echo $email; ?>" class="form-control" required />
+				<p class="help-block">Worden inkomende meldingen van ImageShare naar verzonden</p>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="admin" class="col-sm-2 control-label">Toon uploader (fotograaf)</label>
+			<div class="col-sm-3">
+				<div class="radio"><label><input type="radio" value="1" name="show_uploader" <?php if($show_uploader): ?>checked<?php endif; ?> /> Ja</label></div>
+				<div class="radio"><label><input type="radio" value="0" name="show_uploader" <?php if(!$show_uploader): ?>checked<?php endif; ?> /> Nee</label></div>
+			</div>
+		</div>
+		<?php if(is_superadmin()): ?>
+		<div class="form-group">
+			<label for="admin" class="col-sm-2 control-label">Toon watermerk</label>
+			<div class="col-sm-3">				
+				<div class="radio"><label><input type="radio" value="1" name="watermark" <?php if($watermark): ?>checked<?php endif; ?> /> Ja</label></div>
+				<div class="radio"><label><input type="radio" value="0" name="watermark" <?php if(!$watermark): ?>checked<?php endif; ?> /> Nee</label></div>
+			</div>
+		</div>
+		<?php endif; ?>
+		
+		<div class="form-group">
+			<label for="intro" class="col-sm-2 control-label">Intro</label>
+			<div class="col-sm-3">
+				<textarea rows="5" cols="auto" id="intro" name="intro" class="span4 form-control"><?php echo $intro; ?></textarea>
+				<p class="help-block">Staat op de startpagina</p>
+			</div>
+		</div>
+		
+		<?php if(is_superadmin()): ?>
+		<!--<div class="form-group">
+			<label for="admin" class="col-sm-2 control-label">Paginering</label>
+			<div class="col-sm-3">
+				<div class="radio"><label><input type="radio" value="1" name="pagination" <?php if($pagination): ?>checked<?php endif; ?> /> Infinite scroll</label></div>
+				<div class="radio"><label><input type="radio" value="0" name="pagination" <?php if(!$pagination): ?>checked<?php endif; ?> /> Paginering</label></div>
+			</div>
+		</div>-->
+		
+		<div class="form-group">
+			<label for="admin" class="col-sm-2 control-label">Taal</label>
+			<div class="col-sm-3">
+				<select name="language" class="form-control">
+					<option value="dutch"<?php if($language == 'dutch'): ?> selected<?php endif; ?>>Nederlands</option>
+					<option value="english"<?php if($language == 'english'): ?> selected<?php endif; ?>>Engels</option>
+				</select>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="admin" class="col-sm-2 control-label">Beschikbaarheid</label>
+			<div class="col-sm-3">
+				<div class="radio"><label><input type="radio" value="1" name="public" <?php if($public): ?>checked<?php endif; ?> /> Publiek</label></div>
+				<div class="radio"><label><input type="radio" value="0" name="public" <?php if(!$public): ?>checked<?php endif; ?> /> Privé</label></div>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="admin" class="col-sm-2 control-label">Downloaden zonder inloggen</label>
+			<div class="col-sm-3">
+				<div class="radio"><label><input type="radio" value="1" name="download_without_login" <?php if($download_without_login): ?>checked<?php endif; ?> /> Ja</label></div>
+				<div class="radio"><label><input type="radio" value="0" name="download_without_login" <?php if(!$download_without_login): ?>checked<?php endif; ?> /> Nee</label></div>
+			</div>
+		</div>		
+		
+		<div class="form-group">
+			<label for="admin" class="col-sm-2 control-label">Toon bestandsnamen onder de kleine foto’s:</label>
+			<div class="col-sm-5">
+				<div class="radio"><label><input type="radio" value="filename" name="filename_rendering" <?php if($filename_rendering == 'filename'): ?>checked<?php endif; ?> /> Bestandsnaam</label></div>
+				<div class="radio"><label><input type="radio" value="id" name="filename_rendering" <?php if($filename_rendering == 'id'): ?>checked<?php endif; ?> /> Bestandsnummer (foto-id)</label></div>
+				<div class="radio"><label><input type="radio" value="filename-id" name="filename_rendering" <?php if($filename_rendering == 'filename-id'): ?>checked<?php endif; ?> /> Bestandsnaam & bestandsnummer (foto-id)</label></div>
+				<div class="radio"><label><input type="radio" value="filetype" name="filename_rendering" <?php if($filename_rendering == 'filetype'): ?>checked<?php endif; ?> /> Bestandstype (.jpg, .png, etc.)</label></div>
+				<div class="radio"><label><input type="radio" value="uploader" name="filename_rendering" <?php if($filename_rendering == 'uploader'): ?>checked<?php endif; ?> /> Uploader (fotograaf)</label></div>
+				<div class="radio"><label><input type="radio" value="hide" name="filename_rendering" <?php if($filename_rendering == 'hide'): ?>checked<?php endif; ?> /> Niets</label></div>
+			</div>
+		</div>
+
+		<!--<div class="form-group">
+			<label for="admin" class="col-sm-2 control-label">Toon extentie</label>
+			<div class="col-sm-3">
+				<div class="radio"><label><input type="radio" value="1" name="show_extension" <?php if($show_extension): ?>checked<?php endif; ?> /> Ja</label></div>
+				<div class="radio"><label><input type="radio" value="0" name="show_extension" <?php if(!$show_extension): ?>checked<?php endif; ?> /> Nee</label></div>
+			</div>
+		</div>
+		-->
+		
+		<div class="form-group">
+			<label for="admin" class="col-sm-2 control-label">Toon laatst toegevoegde bestanden op homepage</label>
+			<div class="col-sm-3">
+				<div class="radio"><label><input type="radio" value="1" name="show_last_uploaded" <?php if($show_last_uploaded): ?>checked<?php endif; ?> /> Ja</label></div>
+				<div class="radio"><label><input type="radio" value="0" name="show_last_uploaded" <?php if(!$show_last_uploaded): ?>checked<?php endif; ?> /> Nee</label></div>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="admin" class="col-sm-2 control-label">ImageShare logo linsboven tonen</label>
+			<div class="col-sm-3">
+				<div class="radio"><label><input type="radio" value="0" name="whitelabel_logo" <?php if(!$whitelabel_logo): ?>checked<?php endif; ?> /> Ja</label></div>
+				<div class="radio"><label><input type="radio" value="1" name="whitelabel_logo" <?php if($whitelabel_logo): ?>checked<?php endif; ?> /> Nee</label></div>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="admin" class="col-sm-2 control-label">Vermelding "Refresh Media" onderin in footer tonen</label>
+			<div class="col-sm-3">
+				<div class="radio"><label><input type="radio" value="0" name="whitelabel_footer" <?php if(!$whitelabel_footer): ?>checked<?php endif; ?> /> Ja</label></div>
+				<div class="radio"><label><input type="radio" value="1" name="whitelabel_footer" <?php if($whitelabel_footer): ?>checked<?php endif; ?> /> Nee</label></div>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="admin" class="col-sm-2 control-label">Toon sponser footer</label>
+			<div class="col-sm-3">
+				<div class="radio"><label><input type="radio" value="1" name="sponser_footer" <?php if($sponser_footer): ?>checked<?php endif; ?> /> Ja</label></div>
+				<div class="radio"><label><input type="radio" value="0" name="sponser_footer" <?php if(!$sponser_footer): ?>checked<?php endif; ?> /> Nee</label></div>
+			</div>
+		</div>	
+		
+		<div class="form-group">
+			<label for="admin" class="col-sm-2 control-label">Uploadmogelijkheid</label>
+			<div class="col-sm-3">
+				<div class="radio"><label><input type="radio" value="1" name="extra_uploads" <?php if($extra_uploads): ?>checked<?php endif; ?> /> Alles</label></div>
+				<div class="radio"><label><input type="radio" value="0" name="extra_uploads" <?php if(!$extra_uploads): ?>checked<?php endif; ?> /> Afbeeldingen</label></div>
+			</div>
+		</div>	
+		
+		
+		<div class="form-group">
+			<label for="admin" class="col-sm-2 control-label">Toon altijd watermerk, ook als je ingelogd bent als admin</label>
+			<div class="col-sm-3">
+				<div class="radio"><label><input type="radio" value="1" name="always_show_watermark" <?php if($always_show_watermark): ?>checked<?php endif; ?> /> Ja</label></div>
+				<div class="radio"><label><input type="radio" value="0" name="always_show_watermark" <?php if(!$always_show_watermark): ?>checked<?php endif; ?> /> Nee</label></div>
+			</div>
+		</div>	
+		
+		<?php endif; ?>
+
+		<div class="form-group">
+			<label for="quota_limit" class="col-sm-2 control-label">Schrijfruimte limiet</label>
+			<div class="col-sm-3">
+				<?php if(!empty($quota_limit)): ?>
+				<div title="" class="progress<?php if($quota_percent > 70 && $quota_percent < 90): ?> progress-warning<?php endif; ?><?php if($quota_percent > 90): ?> progress-danger<?php endif; ?>">
+					<div class="progress-bar" style="width: <?php echo floor($quota_percent / 100 * 281); ?>px;"></div>
+				</div> 
+				<?php endif; ?>
+				<p class="help-block"><?php echo round($quota_used, 2); ?>MB <?php if(!empty($quota_limit)): ?>(<?php echo round($quota_percent); ?>%) gebruikt van de <?php echo $quota_limit; ?>MB<?php else: ?>gebruikt<?php endif; ?></p>
+				
+				<?php if(is_superadmin()): ?>
+					<div class="input-group">
+						<input type="text" name="quota_limit" id="quota_limit" value="<?php echo $quota_limit; ?>" class="form-control">
+						<span class="input-group-addon">MB</span>
+					</div>
+				<?php endif; ?>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-5">
+				<button class="btn btn-primary" type="submit">Wijzigen</button>
+			</div>
+		</div>
+	</fieldset>
+</form>
+
+<script type="text/javascript">
+$(function(){
+	$("input[name='allow_registration']").on('change', function(){
+		$("#terms").hide();
+		if($(this).val() == '1') $("#terms").show();
+	});
+});
+</script>

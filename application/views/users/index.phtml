@@ -1,0 +1,65 @@
+<div class="btn-bar">
+	<a href="/users/add" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Nieuwe gebruiker</a>
+</div>
+
+<div class="table-responsive">
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Gebruikersnaam</th>
+				<th>Type</th>
+				<th>Status</th>
+				<th>Downloads</th>
+				<th>Uploads</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php $i = 0; ?>
+			<?php foreach($users as $user): ?>
+			<tr>
+				<td><?php echo ($i++ + 1); ?></td>
+				<td><a href="/users/profile/<?php echo $user['user_id']; ?>" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-user"></i> <?php echo $user['username']; ?></a></td>
+				<td>
+					<?php if($user['type'] == 'admin'): ?>
+						Admin
+					<?php elseif($user['type'] == 'downloader'): ?>
+						Downloader
+					<?php elseif($user['type'] == 'uploader'): ?>
+						Up- & downloader
+					<?php elseif($user['type'] == 'readonly'): ?>
+						Read-only
+					<?php endif; ?>
+				</td>
+				<td>
+					<?php if($user['active']): ?>
+						<?php if(empty($user['expire_date'])): ?>
+							Actief
+						<?php else: ?>
+							<?php if($user['expire_date'] > time()): ?>
+								Actief, verloopt 
+							<?php else: ?>
+								Verlopen
+							<?php endif; ?>
+							op <?php echo date("d-m-Y", $user['expire_date']); ?>
+						<?php endif; ?>
+					<?php else: ?>
+						Inactief
+					<?php endif; ?>
+				</td>
+				<td><?php echo $this->users_model->count_downloads($user['user_id']); ?></td>
+				<td><?php echo $this->users_model->count_uploads($user['user_id']); ?></td>
+				<td>
+					<div class="pull-right">
+						<a href="/users/edit/<?php echo $user['user_id']; ?>" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-cog"></i> Wijzigen</a>
+						<?php if($user['user_id'] != $this->session->userdata('user_id')): ?>
+							<a href="/users/delete/<?php echo $user['user_id']; ?>" class="btn btn-danger btn-xs delete-warning"><i class="glyphicon glyphicon-trash"></i> Verwijder</a>
+						<?php endif; ?>
+					</div>
+				</td>
+			</tr>
+			<?php endforeach; ?>
+		</tbody>
+	</table>
+</div>

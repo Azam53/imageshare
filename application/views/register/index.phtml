@@ -1,0 +1,106 @@
+<form action="<?php echo base_url(); ?>register" method="post" class="form-horizontal">
+	<fieldset>
+		<div class="form-group">
+			<label for="username" class="col-sm-2 control-label"><?php echo lang('register.username'); ?></label>
+			<div class="col-sm-3">
+				<input type="text" name="username" id="username" value="<?php echo set_value('username'); ?>" class="form-control">
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="password" class="col-sm-2 control-label"><?php echo lang('register.password'); ?></label>
+			<div class="col-sm-3">
+				<input type="password" name="password" id="password" class="form-control">
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="passconf" class="col-sm-2 control-label"><?php echo lang('register.passconf'); ?></label>
+			<div class="col-sm-3">
+				<input type="password" name="passconf" id="passconf" class="form-control">
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="company_name" class="col-sm-2 control-label"><?php echo lang('register.company_name'); ?></label>
+			<div class="col-sm-3">
+				<input type="text" name="company_name" id="company_name" value="<?php echo set_value('company_name'); ?>" class="form-control">
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="first_name" class="col-sm-2 control-label"><?php echo lang('register.name'); ?></label>
+			<div class="col-sm-5">
+				<div class="row">
+					<div class="col-xs-4">
+						<input type="text" name="first_name" id="first_name" value="<?php echo set_value('first_name'); ?>" class="form-control" placeholder="Voornaam">
+					</div>
+					<div class="col-xs-4">
+						<input type="text" name="middle_name" id="middle_name" value="<?php echo set_value('middle_name'); ?>" class="form-control" placeholder="Tussenv.">
+					</div>
+					<div class="col-xs-4">
+						<input type="text" name="last_name" id="last_name" value="<?php echo set_value('last_name'); ?>" class="form-control" placeholder="Achternaam">
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="email" class="col-sm-2 control-label"><?php echo lang('register.email'); ?></label>
+			<div class="col-sm-3">
+				<input type="email" name="email" id="email" value="<?php echo set_value('email'); ?>" class="form-control">
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="address" class="col-sm-2 control-label"><?php echo lang('register.address'); ?></label>
+			<div class="col-sm-3">
+				<input type="text" name="address" id="address" value="<?php echo set_value('address'); ?>" class="form-control">
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="postal_code" class="col-sm-2 control-label"><?php echo lang('register.postal_code'); ?></label>
+			<div class="col-sm-3">
+				<input type="text" name="postal_code" id="postal_code" value="<?php echo set_value('postal_code'); ?>" class="form-control">
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="postal_code" class="col-sm-2 control-label"><?php echo lang('register.place'); ?></label>
+			<div class="col-sm-3">
+				<input type="text" name="place" id="place" value="<?php echo set_value('place'); ?>" class="form-control">
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="postal_code" class="col-sm-2 control-label"><?php echo lang('register.phone_number'); ?></label>
+			<div class="col-sm-3">
+				<input type="text" name="phone_number" id="phone_number" value="<?php echo set_value('phone_number'); ?>" class="form-control">
+			</div>
+		</div>
+		
+		<?php if(!empty($terms)): ?>
+		<div class="form-group">
+			<label for="terms" class="col-sm-2 control-label"><?php echo lang('register.terms'); ?></label>
+			<div class="col-sm-3">
+				<label class="checkbox">
+					<input type="checkbox" value="1" name="terms" <?php set_checkbox('terms', '1', FALSE); ?>>
+					<?php echo lang('register.terms.agree'); ?>
+				</label>
+			</div>
+		</div>
+		<?php endif; ?>
+		
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-5">
+				<button class="btn btn-primary" type="submit"><?php echo lang('register.submit'); ?></button>
+				<a class="btn btn-default" href="/login"><?php echo lang('register.login'); ?></a>
+			</div>
+		</div>
+	</fieldset>
+	
+	<?php if(empty($terms)): ?>
+		<input type="hidden" name="terms" value="1" />
+	<?php endif; ?>
+</form>

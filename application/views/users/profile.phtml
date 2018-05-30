@@ -1,0 +1,69 @@
+<div class="btn-bar">
+	<a href="#" onclick="history.go(-1); return false;" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> <?php echo lang('back'); ?></a>
+</div>
+
+<div class="row">
+  <div class="col-md-3">
+    <h4><?php echo lang('profile.stats'); ?></h4>
+	<div class="table-responsive">
+		<table class="table table-bordered table-striped">	
+			<tbody>
+				<tr>
+					<td width="35%"><strong><?php echo lang('profile.downloads'); ?></strong></td>
+					<td><?php echo $user['user_id'] == 1 ? '&infin;' : $counted_downloads; ?></td>
+				</tr>
+				
+				<tr>
+					<td width="35%"><strong><?php echo lang('profile.uploads'); ?></strong></td>
+					<td><?php echo $counted_uploads; ?></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+  </div>
+  <div class="col-md-9">
+	<h4><?php echo lang('profile.downloads'); ?></h4>
+	
+	<?php if(!empty($downloads_grouped)): ?>
+		<?php foreach($downloads_grouped as $date => $downloads): ?>
+			<div class="table-responsive">
+				<table class="table table-bordered table-striped">	
+					<thead>
+						<tr>
+							<th colspan="4"><?php echo strftime("%a %e %B %Y", $date); ?></th>
+						</tr>
+					</thead>
+			  
+					<tbody>
+						<?php foreach($downloads as $item): ?>
+						<?php $image = $this->images_model->get($item['image_id']); ?>
+						<tr>
+							<td width="70">
+								<?php if(!empty($image)): ?>
+									<a href="<?php echo get_image_url('profile', $item); ?>" class="thumbnail-popover" data-image_id="<?php echo $item['image_id']; ?>"><img src="<?php echo resize($image['client_id'], $image['file'], 160, 120); ?>" width="40" alt="<?php echo $image['name']; ?>" title="<?php echo $image['name']; ?>" class="js-file" /></a>
+								<?php endif; ?>
+							</td>
+							<td width="100"><a href="<?php echo get_image_url('profile', $item); ?>" class="thumbnail-popover" data-image_id="<?php echo $item['image_id']; ?>"><?php echo $item['image_id']; ?></a></td>
+							<td>
+								<?php if(!empty($image)): ?>
+									<a href="<?php echo get_image_url('profile', $image); ?>" class="thumbnail-popover" data-image_id="<?php echo $image['image_id']; ?>"><?php echo $image['name']; ?></a>
+								<?php else: ?>
+									Afbeelding kan niet worden gevonden (<?php echo $item['image_id']; ?>)
+								<?php endif; ?>
+							</td>
+							<td width="100"><?php echo date("H:i"); ?></td>
+						</tr>
+						<?php endforeach; ?>
+					</tbody>
+				</table>
+			</div>
+		<?php endforeach; ?>
+		<br /><br />
+	<?php endif; ?>
+  
+	<?php if($show_uploads): ?>
+		<h4><?php echo lang('profile.uploads'); ?></h4>
+		<?php echo @Widget::run('image_loop', $this->images_model->get_by_user($user['user_id'])); ?>
+	<?php endif; ?>
+  </div>
+</div>

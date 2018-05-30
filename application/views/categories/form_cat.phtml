@@ -1,0 +1,27 @@
+<div class="btn-bar">
+	<a href="/categories" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> Terug</a>
+</div>
+
+<form action="/categories/form_cat<?php if($action == 'edit'): ?>/<?php echo $main_category['main_category_id']; ?><?php endif; ?>" method="post" class="form-horizontal">
+	<fieldset>
+		<div class="form-group">
+			<label for="name" class="col-sm-2 control-label">Hoofdcategorie</label>
+			<div class="col-sm-4">				
+				<input type="text" name="main_category" value="<?php echo ($action == 'edit') ? $main_category['name'] : set_value('main_category'); ?>" class="form-control" placeholder="Vul de hoofdcategorie titel in (bv. kleuren)" style="margin-top: 5px;">
+			</div>
+		</div>	
+		
+		<div class="form-group">
+			<label for="order" class="col-sm-2 control-label">Volgorde nummer</label>
+			<div class="col-sm-1">
+				<input type="text" name="order" id="order" value="<?php echo ($action == 'edit') ? (empty($main_category['order']) ? '' : $main_category['order']) : set_value('order'); ?>" class="form-control">
+			</div>
+		</div>
+	
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-5">
+				<button class="btn btn-primary" type="submit"><?php if($action == 'edit'): ?>Wijzigen<?php else: ?>Toevoegen<?php endif; ?></button>
+			</div>
+		</div>
+	</fieldset>
+</form>

@@ -1,0 +1,91 @@
+<div class="btn-bar">
+	<a href="/categories" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> Terug</a>
+</div>
+
+<form action="/categories/form<?php if($action == 'edit'): ?>/<?php echo $category['category_id']; ?><?php endif; ?>" method="post" class="form-horizontal">
+	<fieldset>	
+		<div class="form-group">
+			<label for="name" class="col-sm-2 control-label">Hoofdcategorie</label>
+			<div class="col-sm-4">
+				<select name="main_category_id" class="form-control">	
+						<option value="">Algemeen</option>
+						<?php foreach($main_categories as $main_category) : ?>
+							<option value="<?php echo $main_category['main_category_id']; ?>"<?php if(@$category['main_category_id'] == $main_category['main_category_id'] || @$this->input->get('category') == $main_category['main_category_id']): ?> selected="selected"<?php endif; ?>><?php echo $main_category['name']; ?></option>
+						<?php endforeach; ?>
+					</option>
+				</select>				
+			</div>
+			<a class="btn btn-primary" href="/categories/form_cat/" target="_blank">Nieuwe hoofdcategorie</a>
+		</div>
+		
+
+		<div class="form-group">
+			<label for="name" class="col-sm-2 control-label">Categorie</label>
+			<div class="col-sm-3">
+				<input type="text" name="name" id="name" value="<?php echo ($action == 'edit') ? $category['name'] : set_value('name'); ?>" placeholder="bv. rood" class="form-control">
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="order" class="col-sm-2 control-label">Volgorde nummer</label>
+			<div class="col-sm-1">
+				<input type="text" name="order" id="order" value="<?php echo ($action == 'edit') ? (empty($category['order']) ? '' : $category['order']) : set_value('order'); ?>" class="form-control">
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="keywords" class="col-sm-2 control-label">Zoek trefwoorden</label>
+			<div class="col-sm-3">
+				<input name="keywords" id="keywords" class="search-keywords form-control" value="<?php echo ($action == 'edit') ? $category['keywords'] : set_value('keywords'); ?>" />
+			</div>
+		</div>
+		
+		<div class="form-group query-type-container" style="display: none;">
+			<label class="col-sm-2 control-label">Zoek optie</label>
+			<div class="col-sm-7">
+				<div class="radio"><label><input name="query_type" type="radio" value="OR" <?php if($action == 'add' || $category['query_type'] == 'OR'): ?>checked<?php endif; ?> />Bestanden moeten minimaal 1 van de bovenstaande trefwoorden bevatten</label></div>
+				<div class="radio"><label><input name="query_type" type="radio" value="AND" <?php if($action == 'edit' && $category['query_type'] == 'AND'): ?>checked<?php endif; ?> />Bestanden moeten verplicht alle bovenstaande trefwoorden bevatten</label></div>
+				<p class="help-block query-helper" style="display: none;">
+					<strong>Voorbeeld zoekopdracht:</strong><span></span>
+				</p>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-5">
+				<button class="btn btn-primary" type="submit"><?php if($action == 'edit'): ?>Wijzigen<?php else: ?>Toevoegen<?php endif; ?></button>
+			</div>
+		</div>
+	</fieldset>
+</form>
+
+<script type="text/javascript">
+$(function(){
+	$("select[name='subcategory']").on('change', function(){
+		$("#subcategory_new").hide();
+		if($(this).val() == 'new_subcategory'){
+			$("#subcategory_new").show().focus();
+		}
+	}).change();
+	
+	var keywords = '';
+	var updateQueryPreview = function(){
+		var query_type = $("input[name='query_type']:checked").val();
+		$(".query-helper").show();
+		$(".query-helper span").html(keywords.split(",").join(' ' + query_type + ' '));
+	};
+	
+	addTagsInput($(".search-keywords"), function(){
+		keywords = $(this).val();
+		
+		$(".query-type-container").hide();
+		if(keywords.split(",").length > 1)
+		{
+			$(".query-type-container").show();
+		}
+		
+		updateQueryPreview();
+	});
+	$("input[name='query_type']").on('change', updateQueryPreview);
+});
+</script>

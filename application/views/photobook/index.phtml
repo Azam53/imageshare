@@ -1,0 +1,38 @@
+<form action="/photobook" method="post" class="form-horizontal" enctype="multipart/form-data">
+    <fieldset>
+
+
+        <div class="form-group">
+            <label for="email" class="col-sm-2 control-label">Naam fotoboek</label>
+            <div class="col-sm-3">
+                <input type="text" id="name" name="name" value="" class="form-control" required />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-5">
+                <button class="btn btn-primary" type="submit">Fotoboek aanmaken</button>
+            </div>
+        </div>
+    </fieldset>
+</form>
+
+<fieldset>
+    <?php foreach ($photobooks as $photobook){
+        ?>
+        <div class="form-group">
+            <div class="col-sm-8"><a href="/photobook/show/<?php echo $photobook['id']; ?>"><?php echo $photobook['name']; ?></a></div>
+            <div class="col-sm-4">
+                <a href="/photobook/delete/<?php echo $photobook['id']; ?>" class="btn btn-danger delete-warning">
+                    <i class="glyphicon glyphicon-trash"></i>
+                    <?php echo lang('info.delete'); ?>
+                </a>
+            </div>
+        </div>
+        <?php
+
+    } ?>
+</fieldset>
+
+<script type="text/javascript">
+
+</script>

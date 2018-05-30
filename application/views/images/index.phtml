@@ -1,0 +1,108 @@
+<div class="row">
+	<div <?php if($left_column): ?> class="col-sm-3 col-md-3"<?php endif; ?>>
+		<div class="bulk well hide" style="max-width: 300px;">
+			<p><span id="bulk-selected">0 bestanden</span> geselecteerd.</p>
+			<a href="" class="btn btn-default btn-block btn-xl bulk-mail"><i class="glyphicon glyphicon-envelope"></i> Mailen</a>
+			<a href="" class="btn btn-default btn-block btn-xl bulk-add-keywords"><i class="glyphicon glyphicon-plus"></i> Extra trefwoorden</a>			
+			<a href="" class="btn btn-default btn-block btn-xl select-all-checkboxes" data-select="0"><i class="glyphicon glyphicon-plus"></i> Selecteer / Deselecteer alles</a>			
+			<a href="" class="btn btn-danger btn-block btn-xl js-delete delete-warning"><i class="glyphicon glyphicon-trash"></i> Verwijderen</a>			
+		</div>			
+	
+		<?php if($mode != 'all'): ?>
+			<?php echo $categories; ?>
+		<?php endif; ?>
+		
+		
+		
+		<hr>
+		<?php if(!empty($keywords)): ?>
+		<h3><?php echo lang('info.keywords'); ?></h3>
+			<?php $teller = 1; ?>
+			<div>
+				<?php foreach($keywords as $keyword): ?>					
+					<?php if(!$left_column): ?>
+						<?php if($teller>15):  ?>
+								<a href="/images/search/<?php echo $keyword; ?>" class="btn btn-info btn-xs btn-keyword no-display" style="margin-bottom: 4px;"><?php echo $keyword; ?></a>
+							<?php else: ?>
+								<a href="/images/search/<?php echo $keyword; ?>" class="btn btn-info btn-xs btn-keyword" style="margin-bottom: 4px;"><?php echo $keyword; ?></a>
+							<?php endif; ?>						
+						<?php $teller++; ?>
+					<?php else: ?>
+						<a href="/images/search/<?php echo $keyword; ?>" class="btn btn-info btn-xs btn-keyword" style="margin-bottom: 4px;"><?php echo $keyword; ?></a>
+					<?php endif; ?>
+				<?php endforeach; ?>
+			
+			</div>	
+			
+			<?php if((count($keywords)>15) && !$left_column): ?>
+				<a href="#" class="show-more-keywords">Toon alle trefwoorden</a>
+			<?php endif; ?>			
+			
+		<?php endif; ?>
+		
+		
+	</div>
+	
+	
+	<div <?php if($left_column): ?>  class="col-sm-9 col-md-9"<?php endif; ?>>
+		<?php if($searched || $mode == 'all'): ?>
+			<div class="clearfix limit-select" style="">
+				<form action="/images/set_limit" method="post" class="form-inline pull-right" role="form" style="margin:<?php if(!empty($pagination)): ?>20px<?php else: ?>0<?php endif; ?> 0 20px 0;">
+					<div class="form-group">
+						<label>Toon:</label>
+						<select name="limit" onchange="$(this).parents('form').submit();" class="form-control">
+							<option value="24"<?php if($limit == 24): ?> selected="selected"<?php endif; ?>>24</option>
+							<option value="48"<?php if($limit == 48): ?> selected="selected"<?php endif; ?>>48</option>
+							<option value="74"<?php if($limit == 74): ?> selected="selected"<?php endif; ?>>74</option>
+							<option value="96"<?php if($limit == 96): ?> selected="selected"<?php endif; ?>>96</option>
+							<option value="all"<?php if($limit == "all"): ?> selected="selected"<?php endif; ?>>Alles</option>
+						</select>
+					</div>
+				</form>
+				<?php echo $pagination; ?>
+			</div>
+			
+			<?php echo @Widget::run('image_loop', $images, $mode, $image_width,$keywords,$embed); ?>
+			<?php echo $pagination; ?>
+		<?php else: ?>
+			<?php if($this->client['show_last_uploaded'] == 1): ?>
+				<div class="widget">
+					<h3><?php echo lang('last_upload.title'); ?></h3>
+					<?php echo @Widget::run('image_loop', $this->images_model->get_latests_uploaded((4 * 4) + ($left_column ? 0 : 2)), 'last_uploaded', $image_width); ?>
+				</div>
+			<?php else: ?>
+				<div class="widget">					
+					<?php echo @Widget::run('image_loop', $this->images_model->get_selected_images((4 * 4) + ($left_column ? 0 : 2)), 'selected_images', $image_width); ?>
+				</div>
+			<?php endif; ?>
+		<?php endif; ?>
+	</div>
+</div>
+
+<div class="modal" id="bulk-add-keywords-modal">
+<form action="/images/bulk_add_keywords" method="post">
+  <div class="modal-dialog">
+	<div class="modal-content">
+	  <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title">Extra trefwoorden toevoegen</h4>
+	  </div>
+	  <div class="modal-body">
+	
+		<label>Extra trefwoorden</label>
+		<input type="text" value="" name="keywords" class="keywords" placeholder="+ Trefwoord" />		
+	
+	  </div>
+	  <div class="modal-footer">
+	   <button name="submit" class="btn btn-default btn-primary" type="submit">Toevoegen</button>
+	   <a href="#" class="btn btn-default" data-dismiss="modal"><?php echo lang('delete_modal.cancel'); ?></a>
+	  </div>
+	</div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+  <input type="hidden" name="image_ids" value="" />
+</form>
+</div><!-- /.modal -->
+
+
+<script src="/js/tiny_mce_popup.js" type="text/javascript"></script>
+<script src="/js/tiny_dialog.js.js" type="text/javascript"></script>

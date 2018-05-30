@@ -1,0 +1,25 @@
+<?php if(!empty($images)): ?>
+	<div class="row image_loop mode-<?php echo $mode; ?>">
+		<?php if($mode == 'prev_next'): ?>
+		<div class="col-xs-6 col-md-1">
+			<?php if(!empty($images[1])): ?><a class="arrow-btn" href="<?php echo get_image_url($mode, $images[1]); ?>"><img src="/img/left.png" alt="" /></a><?php endif; ?>
+		</div>
+		<?php endif; ?>
+		
+		<?php foreach($images as $image): ?>
+			<div class="col-xs-6 col-md-<?php echo $col_width; ?>">
+				<?php if(!empty($image)): ?>
+					<?php echo Widget::run('image', $image, $mode,$embed); ?>
+				<?php endif; ?>
+			</div>
+		<?php endforeach; ?>
+		
+		<?php if($mode == 'prev_next'): ?>
+		<div class="col-xs-6 col-md-1">
+			<?php if(!empty($images[3])): ?><a class="arrow-btn arrow-btn-right" href="<?php echo get_image_url($mode, $images[3]); ?>"><img src="/img/right.png" alt="" /></a><?php endif; ?>
+		</div>
+		<?php endif; ?>
+	</div>
+<?php elseif($mode != 'prev_next'): ?>
+	<p><?php echo lang('no_images_found'); ?></p>
+<?php endif; ?>

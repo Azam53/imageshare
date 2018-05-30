@@ -1,0 +1,94 @@
+<p><img src="<?php echo resize($client_id, $file, 329); ?>" alt="" /></p>
+
+<table class="table table-bordered table-striped">	
+	<tbody>
+		<tr>
+			<td width="35%"><strong><?php echo lang('info.file_id'); ?></strong></td>
+			<td>
+				<?php echo $image_id; ?>
+			</td>
+		</tr>
+		
+		<tr>
+			<td width="35%"><strong><?php echo lang('info.filename'); ?></strong></td>
+			<td title="<?php echo $name . '.' . $extension; ?>">
+				<?php echo $name; ?><?php if($show_extension): ?>.<?php echo $extension; ?><?php endif; ?>
+			</td>
+		</tr>
+		
+		<tr>
+			<td width="35%"><strong><?php echo lang('info.filesize'); ?></strong></td>
+			<td><?php echo format_bytes($filesize); ?></td>
+		</tr>
+		
+		<?php if($show_format): ?>
+		<tr>
+			<td width="35%"><strong><?php echo lang('info.size'); ?></strong></td>
+			<td><?php echo $width; ?> x <?php echo $height; ?></td>
+		</tr>
+		<?php endif; ?>
+
+		<tr>
+			<td width="35%"><strong><?php echo lang('info.uploaded_at'); ?></strong></td>
+			<td><?php echo strftime("%e %B %Y %H:%M", $uploaded_at); ?></td>
+		</tr>
+		
+		<?php if(!empty($show_uploader)): ?>
+		<tr>
+			<td width="35%"><strong><?php echo lang('info.uploader'); ?></strong></td>
+			<td>
+				<?php if($uploader['username'] == 'superadmin'): ?>
+					Refresh Media
+				<?php else: ?>
+					<a href="<?php echo base_url(); ?>users/profile/<?php echo $uploader['user_id']; ?>" class="btn btn-mini"><i class="icon-user"></i> <?php echo $uploader['username']; ?></a>
+				<?php endif; ?>
+			</td>
+		</tr>
+		<?php endif; ?>
+		
+		<tr>
+			<td width="35%"><strong><?php echo lang('info.keywords'); ?></strong></td>
+			<td>
+				<?php if(count($keywords) > 0): ?>
+					<div class="">
+						<?php foreach($keywords as $keyword): ?>
+							<a href="/images/search/<?php echo $keyword; ?>" class="btn btn-info btn-mini btn-keyword"><?php echo $keyword; ?></a>
+						<?php endforeach; ?>
+					</div>
+				<?php else: ?>
+					<?php echo lang('info.keywords.no_found'); ?>
+				<?php endif; ?>
+			</td>
+		</tr>
+		
+		<?php if(!empty($notes)): ?>
+		<tr>
+			<td width="35%"><strong><?php echo lang('info.notes'); ?></strong></td>
+			<td><?php echo $notes; ?></td>
+		</tr>
+		<?php endif; ?>
+	</tbody>
+</table>
+
+<?php if($logged_in): ?>
+	<div class="btn-group">
+		<a href="/images/download/<?php echo $image_id; ?>" data-href="/images/download/<?php echo $image_id; ?>" class="btn btn-primary btn-large js-download-button" target="_blank"><i class="icon-download icon-white"></i> <?php echo lang('info.download'); ?></a>
+		<button type="button" class="btn btn-primary btn-large js-expand-options">
+			<span class="caret"></span>
+		</button>
+	</div>
+	
+	<div id="options" style="display: none; margin-top: 15px;" data-ratio="<?php echo $height / $width; ?>">
+		<label><?php echo lang('info.option_size'); ?></label>
+		<input type="text" class="form-control" value="<?php echo $width; ?>" data-width="<?php echo $width; ?>" id="option-width" style="width: 75px;" /> x <input type="text" class="form-control" value="<?php echo $height; ?>" data-height="<?php echo $height; ?>" id="option-height" style="width: 75px;" />		
+		<a href="" id="aspect-ratio-lock"><i class="icon-lock"></i></a>
+	</div>
+<?php endif; ?>
+
+<div class="" style="margin-top: 10px;">
+	<?php /*<a href="/images/share/<?php echo $image_id; ?>" class="btn btn-small"><i class="icon-envelope"></i> Mail</a>*/ ?>
+	<?php if(is_admin() || $this->session->userdata('user_id') == $uploaded_by): ?>
+		<a href="/images/edit/<?php echo $image_id; ?>" class="btn btn-small"><i class="icon-cog"></i> <?php echo lang('info.edit'); ?></a>
+		<a href="/images/delete/<?php echo $image_id; ?>" class="btn btn-small btn-danger delete-warning"><i class="icon-trash icon-white"></i> <?php echo lang('info.delete'); ?></a>
+	<?php endif; ?>
+</div>

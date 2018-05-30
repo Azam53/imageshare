@@ -1,0 +1,27 @@
+<form action="" method="post" class="form-horizontal">
+	<fieldset>
+		<div class="form-group">
+			<label for="username" class="col-sm-2 control-label"><?php echo lang('login.username'); ?></label>
+			<div class="col-sm-3">
+				<input type="text" name="username" id="username" value="<?php echo set_value('username'); ?>" class="form-control">
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="password" class="col-sm-2 control-label"><?php echo lang('login.password'); ?></label>
+			<div class="col-sm-3">
+				<input type="password" name="password" id="password" class="form-control">
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-5">
+				<button class="btn btn-primary" type="submit"><?php echo lang('login.submit'); ?></button>
+				<?php if($is_client_page && $allow_registration): ?>
+				<a class="btn btn-default" href="/register"><?php echo lang('login.register'); ?></a>
+				<a class="btn btn-default" href="/login/forgot_password"><?php echo lang('login.forgot_password'); ?></a>
+				<?php endif; ?>
+			</div>
+		</div>
+	</fieldset>
+</form>

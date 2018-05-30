@@ -1,0 +1,45 @@
+@media (max-width: 767px) {
+	footer p{
+		text-align:center;
+	}
+	
+	body{
+		min-width: 320px;
+	}
+	
+	ul.nav,ul.nav  > li{
+		width:100%;
+	}
+	
+	ul.nav > li > .submenu{
+		text-align:center;
+		width:100%;
+	}
+	
+	.navbar .navbar-nav{
+		display: inline-block;
+		float:none;
+		vertical-align:top;
+	}
+	.navbar .navbar-collapse{
+		text-align:center;
+	}
+	.sub-brand-con{float:none;margin-bottom:15px;}
+	.container,.hide-on-upload{margin-left:5px;margin-right:5px;}	
+	.image_loop{margin-right:0;}
+	.btn-container{margin-bottom:5px;}
+	.table-margin{margin-top:5px;}
+	h1{font-size:26px;}
+	
+	.btn-bar{float:none;margin-bottom:5px;margin-top:5px;}
+	.btn-bar a{margin-bottom:5px;}
+	.floating-button{border-radius:0;left:0;padding:0;}
+	.floating-button button{width:100%;border-radius:0;}
+	.no-show-mobile{display:none;}
+	.tags_input{width:100%!important;}
+	/*.jumbotron.jumbotron-search{padding:0;}
+	.jumbotron.jumbotron-search{padding-bottom:15px;}*/
+	.jumbotron{margin-bottom:0px;padding:15px!important;}
+	.sub-brand-con{display:none;}
+	
+}

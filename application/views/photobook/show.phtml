@@ -1,0 +1,109 @@
+<div class="row">
+    <div class="col-md-12">
+        <form action="" method="post" enctype="multipart/form-data">
+            <label for="keyword">
+                Trefwoord
+            </label>
+            <input type="text" name="keyword">
+            <input type="submit" value="zoek afbeeldingen">
+        </form>
+    </div>
+    <div id="origin" class="col-md-6 fbox ui-droppable">
+        <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+            <?php $counter = 0; ?>
+            <?php
+            $limit = 48;
+            $page = $currentPage;
+            $end = $limit * $page;
+            $start = $end - $limit;
+            $result = array_slice($images,$start,$limit);
+            ?>
+
+            <?php foreach ($result as $image){
+                ?>
+                <div class="col-md-4">
+                    <div class="col-md-4 draggable old" title="<?php echo $image['image_id']; ?>" id="<?php echo $image['image_id']; ?>">
+                        <img src="<?php echo str_replace($_SERVER['DOCUMENT_ROOT'], '', 'http://' . $_SERVER['SERVER_NAME'] . '/api/get_image/' . $image['image_id'] . '/120/90'); ?>"  width="120px"/>
+                        <input type="hidden" name="images[]" id="<?php echo $image['image_id']; ?>" value="<?php echo $image['image_id']; ?>" />
+                    </div>
+                </div>
+
+
+                <?php
+
+            } ?>
+
+        </form>
+        <ul class="pagination">
+            <?php
+            for ($counter = 1; $counter <= $pagination; $counter++){
+                if($currentPage == $counter){
+                    $active = 'active';
+                }else{
+                    $active = '';
+                }
+                echo '<li class="' . $active . '" ><a href="?page=' . $counter . '">' . $counter . '</a></li>';
+            }
+            ?>
+        </ul>
+    </div>
+    <div class="col-md-6">
+        <form action="/photobook/saveImage" method="post" class="form-horizontal" enctype="multipart/form-data">
+            <div class="col-sm-12 btn-wrap">
+                <strong>Sleep afbeelding in het grijze valk hieronder</strong>
+                <button class="btn btn-primary" type="submit">opslaan</button>
+            </div>
+            <div id="drop" class="fbox">
+                <input type="hidden" name="photobook" value="<?php echo $photobook_id; ?>" />
+                <?php if(isset($photobook)){ ?>
+                    <?php foreach ($photobook as $item){?>
+                        <div class="col-md-4">
+                            <div class="draggable new" title="<?php echo $item[0]['image_id']; ?>" id="<?php echo $item[0]['image_id']; ?>">
+                                <img src="<?php echo str_replace($_SERVER['DOCUMENT_ROOT'], '', 'http://' . $_SERVER['SERVER_NAME'] . '/api/get_image/' . $item[0]['image_id'] . '/120/90'); ?>"  width="120px"/>
+                                <input type="hidden" name="images[]" id="<?php echo $item[0]['image_id']; ?>" value="<?php echo $item[0]['image_id']; ?>" />
+                            </div>
+                        </div>
+                    <?php } ?>
+                <?php } ?>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(".draggable").draggable({ cursor: "crosshair", revert: "invalid"});
+    $("#drop").droppable({ accept: ".old",
+        drop: function(event, ui) {
+            console.log("drop");
+            $(this).removeClass("border").removeClass("over");
+            $(this).removeClass("old");
+            $(this).addClass("new");
+            var dropped = ui.draggable;
+            var droppedOn = $(this);
+            $(dropped).detach().css({top: 0,left: 0}).appendTo(droppedOn);
+
+
+        },
+        over: function(event, elem) {
+            $(this).addClass("over");
+            console.log("over");
+        }
+        ,
+        out: function(event, elem) {
+            $(this).removeClass("over");
+        }
+    });
+    $("#drop").sortable();
+
+    $("#origin").droppable({ accept: ".new", drop: function(event, ui) {
+        console.log("drop");
+        $(this).removeClass("border").removeClass("over");
+        $(this).removeClass("new");
+        $(this).addClass("old");
+        var dropped = ui.draggable;
+        var droppedOn = $(this);
+        $(dropped).detach().css({top: 0,left: 0}).appendTo(droppedOn);
+
+
+    }});
+</script>

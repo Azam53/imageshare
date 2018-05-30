@@ -1,0 +1,118 @@
+<div class="btn-bar">
+	<a href="/users" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> Terug</a>
+</div>
+
+<form action="/users/add" method="post" class="form-horizontal">
+	<fieldset>
+		<div class="form-group">
+			<label for="username" class="col-sm-2 control-label">Gebruikersnaam</label>
+			<div class="col-sm-3">
+				<input type="text" name="username" id="username" value="<?php echo set_value('username'); ?>" class="form-control" autocomplete="off">
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="password" class="col-sm-2 control-label">Wachtwoord</label>
+			<div class="col-sm-3">
+				<input type="password" name="password" id="password" class="form-control" autocomplete="off">
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="company_name" class="col-sm-2 control-label">Bedrijfsnaam</label>
+			<div class="col-sm-3">
+				<input type="text" name="company_name" id="company_name" value="<?php echo set_value('company_name'); ?>" class="form-control">
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="first_name" class="col-sm-2 control-label">Naam</label>
+			<div class="col-sm-5">
+				<div class="row">
+					<div class="col-xs-4">
+						<input type="text" name="first_name" id="first_name" value="<?php echo set_value('first_name'); ?>" class="form-control" placeholder="Voornaam">
+					</div>
+					<div class="col-xs-4">
+						<input type="text" name="middle_name" id="middle_name" value="<?php echo set_value('middle_name'); ?>" class="form-control" placeholder="Tussenv.">
+					</div>
+					<div class="col-xs-4">
+						<input type="text" name="last_name" id="last_name" value="<?php echo set_value('last_name'); ?>" class="form-control" placeholder="Achternaam">
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="email" class="col-sm-2 control-label">E-mail</label>
+			<div class="col-sm-3">
+				<input type="email" name="email" id="email" value="<?php echo set_value('email'); ?>" class="form-control">
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="address" class="col-sm-2 control-label">Adres</label>
+			<div class="col-sm-3">
+				<input type="text" name="address" id="address" value="<?php echo set_value('address'); ?>" class="form-control">
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="postal_code" class="col-sm-2 control-label">Postcode</label>
+			<div class="col-sm-3">
+				<input type="text" name="postal_code" id="postal_code" value="<?php echo set_value('postal_code'); ?>" class="form-control">
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="postal_code" class="col-sm-2 control-label">Plaats</label>
+			<div class="col-sm-3">
+				<input type="text" name="place" id="place" value="<?php echo set_value('place'); ?>" class="form-control">
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="postal_code" class="col-sm-2 control-label">Telefoonnummer</label>
+			<div class="col-sm-3">
+				<input type="text" name="phone_number" id="phone_number" value="<?php echo set_value('phone_number'); ?>" class="form-control">
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="admin" class="col-sm-2 control-label">Type</label>
+			<div class="col-sm-6">				
+				<div class="radio"><label><input type="radio" value="admin" name="type" <?php echo set_radio('type', 'admin', TRUE); ?> /> Administrator</label></div>
+				<p class="help-block">Kan gebruikers aanmaken, wijzigen en verwijderen, instellingen wijzigen, categorieën beheren en bestanden up- en downloaden, wijzigen en verwijderen.</p>
+				
+				<div class="radio"><label><input type="radio" value="downloader" name="type" <?php echo set_radio('type', 'downloader'); ?> /> Downloader</label></div>
+				<p class="help-block">Kan alleen bestanden downloaden uit ImageShare.</p>
+				
+				<div class="radio"><label><input type="radio" value="uploader" name="type" <?php echo set_radio('type', 'uploader'); ?> /> Up- & downloader</label></div>
+				<p class="help-block">Kan bestanden up- en downloaden en zijn eigen toegevoegde bestanden wijzigen.</p>
+				
+				<div class="radio"><label><input type="radio" value="readonly" name="type" <?php echo set_radio('type', 'readonly'); ?> /> Readonly</label></div>
+				<p class="help-block">Kan bestanden alleen bekijken.</p>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="admin" class="col-sm-2 control-label">Status</label>
+			<div class="col-sm-3">				
+				<div class="radio"><label><input type="radio" value="1" name="active" checked /> Actief</label></div>
+				<div class="radio"><label><input type="radio" value="0" name="active" /> Inactief</label></div>
+			</div>
+		</div>
+		
+		<div class="form-group" id="expire_date">
+			<label for="expire_date" class="col-sm-2 control-label">Verloopdatum</label>
+			<div class="col-sm-3">				
+				<input type="text" id="expire_date" name="expire_date" class="form-control datepicker" value="" placeholder="dd-mm-yyyy" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-5">
+				<button class="btn btn-primary" type="submit">Toevoegen</button>
+			</div>
+		</div>
+	</fieldset>
+</form>

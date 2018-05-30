@@ -1,0 +1,39 @@
+<div class="btn-bar">
+	<a href="/clients/add" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Nieuwe klant</a>
+</div>
+
+<div class="table-responsive">
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Naam</th>
+				<th>Foto's</th>
+				<th>Schrijfruimte</th>
+				<th width="30%">E-mail</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php $i = 0; ?>
+			<?php foreach($clients as $client): ?>
+			<?php $quota_used = folder_size(uploads_dir($client['client_id'])) / 1048576; ?>
+			<?php $quota_limit = $this->settings_model->get('quota_limit', $client['client_id']); ?>
+			<tr>
+				<td><?php echo ($i++ + 1); ?></td>
+				<td><a href="http://<?php echo $client['url']; ?>.<?php echo $this->config->item('domain'); ?>"><?php echo $client['name']; ?></a></td>
+				<td><?php echo number_format($this->images_model->client_image_count($client['client_id'])); ?></td>
+				<td>
+					<?php echo round($quota_used, 2); ?> / <?php echo empty($quota_limit) ? '&infin;' : $quota_limit; ?> MB <?php if(!empty($quota_limit)): ?><small class="text-muted">(<?php echo round($quota_used / $quota_limit * 100); ?>%)</small><?php endif; ?>
+				</td>
+				<td style="word-break:break-word;"><?php echo implode("<br />", explode(",", $client['email'])); ?></td>
+				<td>
+					<div class="pull-right">
+						<a href="<?php echo base_url(); ?>clients/delete/<?php echo $client['client_id']; ?>" class="btn btn-danger btn-xs delete-warning"><i class="glyphicon glyphicon-trash"></i> Verwijderen</a>
+					</div>
+				</td>
+			</tr>
+			<?php endforeach; ?>
+		</tbody>
+	</table>
+</div>

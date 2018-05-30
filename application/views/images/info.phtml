@@ -1,0 +1,306 @@
+﻿<div class="image-container" style="position: relative;" data-image_id="<?php echo $image_id; ?>">
+	<?php $prev_next = @Widget::run('image_loop', $images, 'prev_next', 2); ?>
+	<?php if(!empty($prev_next)): ?>
+	<center style="margin-bottom: 10px; ">
+		<div class="col-xs-6 col-md-1"></div>
+		<?php echo $prev_next; ?>
+	</center>
+	<?php endif; ?>
+	
+		<div class="row">
+			<div class="col-md-3">
+				<div id="info-container">					
+					<table class="table table-bordered table-striped">	
+						<tbody>
+							<tr>
+								<td colspan="2">
+									<strong style="margin-bottom: 7px; display: block;"><?php echo lang('info.keywords'); ?></strong>
+									<?php if(count($keywords) > 0): ?>
+										<div class="">
+											<?php foreach($keywords as $keyword): ?>
+												<a href="/images/search/<?php echo $keyword; ?>" class="btn btn-info btn-xs btn-keyword" style="margin-bottom: 4px;"><?php echo $keyword; ?></a>
+											<?php endforeach; ?>
+										</div>
+									<?php else: ?>
+										<?php echo lang('info.keywords.no_found'); ?>
+									<?php endif; ?>
+								</td>
+							</tr>
+							
+							<tr>
+								<td width="35%"><strong><?php echo lang('info.file_id'); ?></strong></td>
+								<td>
+									<?php echo $image_id; ?>
+								</td>
+							</tr>
+							
+							<tr>
+								<td width="35%"><strong><?php echo lang('info.filename'); ?></strong></td>
+								<td title="<?php echo $name . '.' . $extension; ?>" style="word-break:break-all;">
+									<?php echo $name; ?><?php if($show_extension): ?>.<?php echo $extension; ?><?php endif; ?>
+								</td>
+							</tr>
+							
+							<tr>
+								<td width="35%"><strong><?php echo lang('info.filesize'); ?></strong></td>
+								<td><?php echo format_bytes($filesize); ?></td>
+							</tr>
+							
+							<tr>
+								<td width="35%"><strong><?php echo lang('info.filetype'); ?></strong></td>
+								<td><?php echo strtoupper($extension); ?></td>
+							</tr>
+							
+							<?php if($show_format && !empty($owidth) && !empty($oheight)): ?>
+							<tr>
+								<td width="35%"><strong><?php echo lang('info.size'); ?></strong></td>
+								<td><?php echo $owidth; ?>x<?php echo $oheight; ?>px</td>
+							</tr>
+							<?php endif; ?>
+
+							<tr>
+								<td width="35%"><strong><?php echo lang('info.uploaded_at'); ?></strong></td>
+								<td><?php echo strftime("%e %B %Y %H:%M", $uploaded_at); ?></td>
+							</tr>
+							
+							<?php if(!empty($show_uploader)): ?>
+							<tr>
+								<td width="35%"><strong><?php echo lang('info.uploader'); ?></strong></td>
+								<td>
+									<?php if($uploader['username'] == 'superadmin'): ?>
+										Refresh Media
+									<?php else: ?>
+										<a href="<?php echo base_url(); ?>users/profile/<?php echo $uploader['user_id']; ?>" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-user"></i> <?php echo $uploader['username']; ?></a>
+									<?php endif; ?>
+								</td>
+							</tr>
+							<?php endif; ?>
+							
+							<?php /*if(!empty($owidth) && !empty($oheight)): ?>
+							<tr>
+								<td>Afbeelding informatie</td>
+								<td>
+									<?php
+									$exif = exif_read_data($original_src, 0, true);
+									foreach ($exif as $key => $section) {
+										foreach ($section as $name => $val) {
+											echo "$key.$name: $val<br />\n";
+										}
+									}
+									?>
+								</td>
+							</td>
+							<?php endif;*/ ?>
+							
+							<?php if(!empty($notes)): ?>
+							<tr>
+								<td width="35%"><strong><?php echo lang('info.notes'); ?></strong></td>
+								<td><?php echo $notes; ?></td>
+							</tr>
+							<?php endif; ?>
+						</tbody>
+					</table>
+			
+
+					<?php if(is_admin() || $this->session->userdata('user_id') == $uploaded_by): ?>
+						<div class="btn-container">
+							<a href="#" class="btn btn-default js-edit"><i class="glyphicon glyphicon-cog"></i> <?php echo lang('info.edit'); ?></a>
+							<a href="/images/delete/<?php echo $image_id; ?>" class="btn btn-danger delete-warning"><i class="glyphicon glyphicon-trash"></i> <?php echo lang('info.delete'); ?></a>
+						</div>
+					<?php endif; ?>
+				</div>
+								
+				<form action="/images/edit/<?php echo $image_id; ?>" method="post" id="edit-form" enctype='multipart/form-data' style="display: none;">
+					<fieldset>
+						<div style="width:100%;display:block;">
+							<div class="form-group">
+								<label for="name">Naam</label>
+								<input type="text" name="name" id="name" value="<?php echo $name; ?>" class="form-control">
+							</div>
+							
+							<div class="form-group">
+								<label for="keywords">Trefwoorden</label>
+								<input name="keywords" id="edit-keywords" value="<?php echo implode(",", $keywords); ?>" class="keywords form-control" />
+							</div>
+							
+							<div class="form-group">
+								<label for="file">Bestand vervangen</label>
+								<input type="file" name="qqfile" id="file" value="" >
+							</div>
+													
+							<div class="form-group">
+								<label for="show_on_homepage">Toon op homepage</label>		
+								<input type="hidden" name="show_on_homepage" value="0">		
+								<input type="checkbox" name="show_on_homepage" value="1" <?php echo ($show_on_homepage==1) ? 'checked':'hier'; ?> >
+							</div>							
+
+							<button class="btn btn-primary js-edit-submit" type="submit">Wijzigen</button>
+							<a href="#" class="btn btn-default js-edit"><?php echo lang('info.cancel_edit'); ?></a>
+						</div>
+					</fieldset>
+				</form>				
+			</div>
+			
+			<div class="col-md-6 zoom-gallery" style="text-align: center;">
+				<?php $original_src = uploads_dir($client_id) . $file; ?>
+				<?php list($owidth, $oheight) = @getimagesize($original_src); ?>
+				
+				<?php //$src = resize($client_id, $file, 700); ?>
+				<?php //list($width, $height) = @getimagesize(FCPATH . $src); ?>
+				
+				<?php if(file_exists($original_src)): ?>
+						<a href="/img/loading.gif" class="image large-img" >
+							<img src="/img/loading.gif" data-height="<?php //echo $height; ?>" alt="" class="image <?php if(may_download()):?> show-large <?php endif; ?>" data-href="" style="max-width: 100%;" />
+						</a>
+				<?php else: ?>
+					<p>Afbeelding kon niet worden gevonden.</p>
+				<?php endif; ?>
+			</div>
+			
+			<script type="text/javascript">
+			$(document).ready(function(){		
+			
+			function interValoriginalImage(){
+				var intervalvar = setInterval(function(){
+					value = $('.large-img').attr('data-href');
+					if(value.indexOf('/uploads/') != '-1'){
+						$('.large-img').attr('href',value);
+						$('.large-img').magnificPopup({							
+							type: 'image',	
+							closeBtnInside: false,	
+							preloader: true,
+							closeOnContentClick: true,							
+							image: {
+									verticalFit: false
+							}
+						});
+						clearInterval(intervalvar);
+					}										
+				},500);
+			}
+			interValoriginalImage();
+			
+				$('.large-img').click(function(){
+					if($(this).attr('href').indexOf('/uploads/') == '-1'){
+						return false;
+					}
+				});
+
+				
+				$('.show-large').click(function(){				
+					$('.show-large-link').attr('href',$(this).attr('data-href'));
+					/*$('.show-large-link')[0].click();*/
+					
+					$('.show-large-link').magnificPopup({
+						delegate : 'a',
+						items: {
+							src: $(this).attr('href')
+						},
+						type: 'image',						  
+						image: {
+							verticalFit: true,
+							tError: '<a href="%url%">The image</a> could not be loaded.' // Error message
+						}						
+					});
+				});
+				
+					
+			});
+				/*
+				$('.show-large').on('click',function(){	
+					$('.show-large').append('<a href="" class="show-large-link" style="display:none;" data-href="">&nbsp;</a>')
+					$('.show-large-link').attr('href',$(this).attr('data-href'));
+					$('.show-large-link')[0].click();
+				});
+				*/
+			</script>
+			
+			
+			
+			<div class="col-md-3">
+			<?php if(!$embed): ?>
+				<?php if(may_download()): ?>
+					<?php if(in_array(strtolower($extension), array('jpg', 'jpeg', 'gif', 'png'))): ?>					
+						<table class="table table-bordered table-striped table-margin">	
+							<tbody>
+								<?php if($owidth >= 500): ?>
+								<tr>
+									<td><input type="radio" value="500x<?php echo round(500 * ($oheight / $owidth)); ?>" name="size" /></td>
+									<td>500x<?php echo round(500 * ($oheight / $owidth)); ?>px</td>
+									<td>small</td>
+								</tr>
+								<?php endif; ?>
+								
+								<?php if($owidth >= 1000): ?>
+								<tr>
+									<td><input type="radio" value="1000x<?php echo round(1000 * ($oheight / $owidth)); ?>" name="size" /></td>
+									<td>1000x<?php echo round(1000 * ($oheight / $owidth)); ?>px</td>
+									<td>medium</td>
+								</tr>
+								<?php endif; ?>
+								
+								<?php if($owidth >= 2000): ?>
+								<tr>
+									<td><input type="radio" value="2000x<?php echo round(2000 * ($oheight / $owidth)); ?>" name="size" /></td>
+									<td>2000x<?php echo round(2000 * ($oheight / $owidth)); ?>px</td>
+									<td>large</td>
+								</tr>
+								<?php endif; ?>
+								
+								<tr>
+									<td><input type="radio" value="original" name="size" checked /></td>
+									<td><?php echo $owidth; ?>x<?php echo $oheight; ?>px</td>
+									<td>original</td>
+								</tr>
+								
+								<tr>
+									<td><input type="radio" value="custom" name="size" /></td>
+									<td>
+										<div>
+											<input style="width:50px;float:left;" type="text" class="form-control input-sm" data-width="<?php echo $owidth; ?>" name="size_width" />
+											<div class="col-xs-1">x</div>
+											<input style="width:50px;float:left;" type="text" class="form-control input-sm" data-height="<?php echo $oheight; ?>" name="size_height" />
+											<a href="" id="aspect-ratio-lock" style="margin-top: 5px;margin-left:3px; float: left;"><i class="glyphicon glyphicon-lock"></i></a>
+										</div>
+									
+										<!-- div class="row">
+											<div class="col-xs-4"><input type="text" class="form-control input-sm" data-width="<?php echo $owidth; ?>" name="size_width" /></div>
+											<div class="col-xs-1">x</div>
+											<div class="col-xs-4"><input type="text" class="form-control input-sm" data-height="<?php echo $oheight; ?>" name="size_height" /></div>
+											<div class="col-xs-1"><a href="" id="aspect-ratio-lock" style="margin-top: 5px; float: left;"><i class="glyphicon glyphicon-lock"></i></a></div>
+										</div -->
+									</td>
+									<td>custom</td>
+								</tr>
+							</tbody>
+						</table>					
+					<?php endif; ?>
+				
+					<div style="margin-bottom: 20px;">						
+						<div class="btn-group">
+							<a href="/images/download/<?php echo $image_id; ?>" data-href="/images/download/<?php echo $image_id; ?>" class="btn btn-primary btn-lg js-download-button" target="_blank"><i class="glyphicon glyphicon-download"></i> <?php echo lang('info.download'); ?></a>
+							<!--<button type="button" class="btn btn-primary btn-lg js-expand-options">
+								<span class="caret"></span>
+							</button>-->
+						</div>
+
+						<div style="display: inline-block; margin-left: 5px;">
+							<a href="/images/share/<?php echo $image_id; ?>" class="btn btn-default btn-lg"><i class="glyphicon glyphicon-envelope"></i> Mailen</a>
+						</div>
+
+						<?php /*<div id="options" class="well form-inline" style="display: none; margin-top: 15px;">
+							<label style="display: block;"><?php echo lang('info.option_size'); ?></label>
+							<input type="text" class="form-control" value="<?php echo $owidth; ?>" data-width="<?php echo $owidth; ?>" id="option-width" style="width: 75px;" /> x <input type="text" class="form-control" value="<?php echo $oheight; ?>" data-height="<?php echo $oheight; ?>" id="option-height" style="width: 75px;" />		
+							
+						</div>*/ ?>
+					</div>
+				<?php endif; ?>
+			<?php else: ?>
+				<div class="form-group">
+					<script type="text/javascript" src="/js/library-imageshare.js"></script>
+					<a href="#" id="send-img" class="btn btn-primary">EMBED!</a>
+				</div>
+			<?php endif; ?>
+			</div>
+		</div>	
+</div>

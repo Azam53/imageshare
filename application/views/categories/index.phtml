@@ -1,0 +1,133 @@
+<div class="btn-bar">
+	<a href="/categories/form?category=" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i> Nieuwe categorie</a>
+	<a href="/categories/form_cat/" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Nieuwe hoofdcategorie</a>
+</div>
+
+<?php if(!empty($general_category)) :?>
+		<?php $id = uniqid(); ?>
+		<div class="panel panel-default" style="overflow: visible;">
+			<div class="panel-heading">
+				<div class="pull-right">
+					<a href="/categories/form?category=" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-plus"></i> Nieuwe categorie</a>
+				</div>				
+				<h4 class="panel-title">
+					<a data-toggle="collapse" data-parent="#accordion" href="#collapse-<?php echo $id; ?>">
+						<strong><?php echo 'Algemeen' ?></strong>
+					</a>
+				</h4>
+			</div>
+			<div id="collapse-<?php echo $id; ?>" class="panel-collapse collapse in">
+				<div class="panel-body table-responsive">
+					<div class="table-responsive">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Naam</th>
+									<th width="40%">Trefwoord</th>
+									<th>Volgorde</th>
+									<th width="20%"></th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php $i = 0; ?>
+								<?php if(!empty($general_category['subcategory'])) : ?>
+								<?php foreach($general_category['subcategory'] as $subcategory): ?>
+								<tr>
+									<td><?php echo ($i++ + 1); ?></td>
+									<td><?php echo $subcategory['name']; ?></td>
+									<td>								
+										<?php $keywords = array_map('trim', explode(",", $subcategory['keywords'])); ?>
+										<?php foreach($keywords as $keyword): ?>
+											<a href="/images/search/<?php echo $keyword; ?>" class="btn btn-info btn-xs btn-keyword" style="margin-bottom: 4px;"><?php echo $keyword; ?></a>
+										<?php endforeach; ?>
+									</td>
+									<td><?php echo empty($subcategory['order']) ? '-' : $subcategory['order']; ?></td>
+									<td>
+										<div class="pull-right">
+											<a href="/categories/form/<?php echo $subcategory['category_id']; ?>" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-cog"></i> Wijzigen</a>
+											<a href="/categories/delete/<?php echo $subcategory['category_id']; ?>" class="btn btn-danger btn-xs delete-warning"><i class="glyphicon glyphicon-trash"></i> Verwijder</a>
+										</div>
+									</td>
+								</tr>
+								<?php endforeach; ?>
+								<?php else : ?>
+								<tr><td colspan="5">Er zijn geen subcategorieën aanwezig. </td></tr>
+								<tr><td colspan="5"><a class="btn btn-danger delete-warning" href="/categories/delete_main/<?php echo $category['main_category_id']?>">Verwijder deze categorie</a></td></tr>
+								<?php endif;  ?>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	<?php endif; ?>
+
+
+
+<?php if(!empty($categories_array)): ?>
+	<?php foreach($categories_array as $category): ?>
+		<?php $id = uniqid(); ?>
+		<div class="panel panel-default" style="overflow: visible;">
+			<div class="panel-heading">
+				<div class="pull-right">
+					<a href="/categories/form_cat/<?php echo $category['main_category_id']; ?>" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-cog"></i> Wijzigen</a>
+					<a href="/categories/form?category=<?php echo $category['main_category_id']; ?>" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-plus"></i> Nieuwe categorie</a>
+				</div>				
+				<h4 class="panel-title">
+					<a data-toggle="collapse" data-parent="#accordion" href="#collapse-<?php echo $id; ?>">
+						<strong><?php echo $category['name']; ?></strong>
+					</a>
+				</h4>
+			</div>
+			<div id="collapse-<?php echo $id; ?>" class="panel-collapse collapse in">
+				<div class="panel-body">
+					<div class="table-responsive">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Naam</th>
+									<th width="40%">Trefwoord</th>
+									<th>Volgorde</th>
+									<th width="20%"></th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php $i = 0; ?>
+								<?php if(!empty($category['subcategory'])) : ?>
+								<?php foreach($category['subcategory'] as $subcategory): ?>
+								<tr>
+									<td><?php echo ($i++ + 1); ?></td>
+									<td><?php echo $subcategory['name']; ?></td>
+									<td>								
+										<?php $keywords = array_map('trim', explode(",", $subcategory['keywords'])); ?>
+										<?php foreach($keywords as $keyword): ?>
+											<a href="/images/search/<?php echo $keyword; ?>" class="btn btn-info btn-xs btn-keyword" style="margin-bottom: 4px;"><?php echo $keyword; ?></a>
+										<?php endforeach; ?>
+									</td>
+									<td><?php echo empty($subcategory['order']) ? '-' : $subcategory['order']; ?></td>
+									<td>
+										<div class="pull-right">
+											<a href="/categories/form/<?php echo $subcategory['category_id']; ?>" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-cog"></i> Wijzigen</a>
+											<a href="/categories/delete/<?php echo $subcategory['category_id']; ?>" class="btn btn-danger btn-xs delete-warning"><i class="glyphicon glyphicon-trash"></i> Verwijder</a>
+										</div>
+									</td>
+								</tr>
+								<?php endforeach; ?>
+								<?php else : ?>
+								<tr><td colspan="5">Er zijn geen subcategorieën aanwezig. </td></tr>
+								<tr><td colspan="5"><a class="btn btn-danger delete-warning" href="/categories/delete_main/<?php echo $category['main_category_id']?>">Verwijder deze categorie</a></td></tr>
+								<?php endif;  ?>
+								
+								
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	<?php endforeach; ?>
+<?php else: ?>
+	<p>Geen categorieën gevonden.</p>
+<?php endif; ?>

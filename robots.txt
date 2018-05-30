@@ -1,0 +1,22 @@
+# hier de bots die niet mogen indexeren
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: YandexBot
+Disallow: /
+
+User-agent: YandexBot/3.0
+Disallow: /
+
+User-agent: YandexImages/3.0
+Disallow: /
+
+User-agent: AhrefsBot/4.0
+Disallow: /
+
+User-agent: Ezooms/1.0
+Disallow: /
+
+## de overige bots mogen wel alleen niet in deze subfolders
+User-agent: *
+Disallow: /cgi-bin

@@ -1,0 +1,29 @@
+<div class="widget">	
+	<?php if($general_category): ?>
+	
+	<h4><?php echo 'Algemeen'; ?></h4>
+	<div class="list-group list-categories">
+		<?php foreach($general_category['subcategory'] as $subcategory): ?>
+			<?php $s = str_replace(",", ' ' . $subcategory['query_type'] . ' ', $subcategory['keywords']); ?>
+			<a href="/images/search/<?php echo $s; ?>" class="list-group-item">
+				<span class="badge"><?php echo $this->images_model->count_search($this->client_id, $s); ?></span>
+				<?php echo $subcategory['name']; ?>
+			</a>
+		<?php endforeach; ?>
+	</div>
+	<?php endif; ?>
+	
+	<?php foreach($categories_array as $categories): ?>
+	<h4><?php echo $categories['name']; ?></h4>
+	
+	<div class="list-group list-categories">
+		<?php foreach($categories['subcategory'] as $subcategory): ?>
+			<?php $s = str_replace(",", ' ' . $subcategory['query_type'] . ' ', $subcategory['keywords']); ?>
+			<a href="/images/search/<?php echo $s; ?>" class="list-group-item">
+				<span class="badge"><?php echo $this->images_model->count_search($this->client_id, $s); ?></span>
+				<?php echo $subcategory['name']; ?>
+			</a>
+		<?php endforeach; ?>
+	</div>
+	<?php endforeach; ?>
+</div>

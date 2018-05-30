@@ -1,0 +1,28 @@
+php_value post_max_size 128M
+php_value upload_max_filesize 128M
+php_value memory_limit 256M
+
+RewriteEngine On
+
+# The RewriteBase / instruction is commented. Remove the "#" to uncomment
+#RewriteBase 
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond $1 !^(index\.php|robots\.txt)
+RewriteRule ^(.*)$ index.php/$1
+
+RewriteCond %{REQUEST_FILENAME} !-f
+
+
+RewriteRule ^(application|modules|plugins|system|themes) index.php/$1 [L]
+
+RewriteCond %{HTTP_USER_AGENT} ^YandexBot [OR]
+RewriteCond %{HTTP_USER_AGENT} ^YandexImages [OR]
+RewriteCond %{HTTP_USER_AGENT} ^AhrefsBot [OR]
+RewriteCond %{HTTP_USER_AGENT} ^MJ12bot [OR]
+RewriteCond %{HTTP_USER_AGENT} ^Ezooms [OR]
+RewriteCond %{HTTP_USER_AGENT} ^PiplBot [OR]
+RewriteCond %{HTTP_USER_AGENT} ^AhrefsBot
+
+RewriteRule ^.* - [F]

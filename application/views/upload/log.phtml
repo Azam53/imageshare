@@ -1,0 +1,29 @@
+<div class="btn-bar">
+	<a href="/upload" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> Terug</a>
+</div>
+
+<?php if(!empty($images)): ?>
+
+	<div class="row ">		
+		<?php foreach($images as $image): ?>
+			<?php $has_cache = resize($image['client_id'], $image['file'], 240, 150, TRUE, TRUE);  ?>
+			<div class="col-md-6">
+				<div class="row">
+					<div class="col-md-3 thumbnail" data-image_id="<?php echo $image['image_id']; ?>" style="margin-top: 10px; width: 240px; height: 150px;">
+						<img src="<?php if($has_cache){ ?><?php echo resize($image['client_id'], $image['file'], 240, 150); ?><?php }else{ ?>/img/loading.gif <?php } ?>" alt="<?php echo $image['name']; ?>" title="<?php echo $image['name']; ?>" class="js-file <?php if(!$has_cache): ?>ajax-load<?php endif; ?> img-responsive" data-image_id="<?php echo $image['image_id']; ?>" data-placement="right" />
+					</div>
+					<div class="col-md-3" style="margin-top: 10px; min-height: 150px;">
+						<h4><?php echo $image['name']; ?></h4>
+						<p><?php echo date("d-m-Y", $image['date']); ?></p>
+						<?php echo implode(",", $image['keywords']); ?>
+					</div>
+				</div>
+			</div>
+			
+			
+		<?php endforeach; ?>
+		
+	</div>
+<?php else: ?>
+	<p>De upload log is op het moment leeg.</p>
+<?php endif; ?>

@@ -1,0 +1,33 @@
+<?php if($mode != 'prev_next' && is_admin()): ?>
+	<input type="checkbox" value="<?php echo $image['image_id']; ?>" name="selected[]" class="checkbox file-checkbox" />
+<?php endif; ?>
+<a href="<?php echo get_image_url($mode, $image);?><?php if($embed==1) echo '&embed=1'; ?>" class="thumbnail<?php if(@$this->active_image_id == $image['image_id']): ?> active<?php endif; ?>" data-image_id="<?php echo $image['image_id']; ?>">
+	<!-- <?php //echo @$this->input->get->('embed'); ?> -->
+	<?php $has_cache = resize($image['client_id'], $image['file'], 160, 120, TRUE, TRUE); ?>
+	<?php if($show_extension): ?>
+		<span class="extension"><?php echo strtoupper(end(explode(".", $image['file']))); ?></span>
+	<?php endif; ?>
+
+	<img src="<?php if($has_cache): ?><?php echo resize($image['client_id'], $image['file'], 160, 120); ?><?php else: ?>/img/loading.gif<?php endif; ?>" alt="<?php echo $image['name']; ?>" title="<?php echo $image['name']; ?>" class="js-file <?php if(!$has_cache): ?>ajax-load<?php endif; ?>" />
+	
+	<?php if($filename_rendering != 'hide'): ?>
+		<h5>
+			<?php if($filename_rendering == 'filename'): ?>
+				<?php echo $image['name']; ?>
+			<?php elseif($filename_rendering == 'filename-id'): ?>
+				<?php echo $image['name']; ?> - <?php echo $image['image_id']; ?>
+			<?php elseif($filename_rendering == 'id'): ?>
+				<?php echo $image['image_id']; ?>
+			<?php elseif($filename_rendering == 'filetype'): ?>
+				<?php echo strtoupper(end(explode(".", $image['file']))); ?>
+			<?php elseif($filename_rendering == 'uploader'): ?>
+				<?php $uploader = $this->users_model->get($image['uploaded_by']); ?>
+				<?php if($uploader['username'] == 'superadmin'): ?>
+					Refresh Media
+				<?php else: ?>
+					<?php echo $uploader['username']; ?>
+				<?php endif; ?>
+			<?php endif; ?>
+		</h5>
+	<?php endif; ?>
+</a>

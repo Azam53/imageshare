@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8">
+
+    <title>ImageShare<?php if(!empty($client)): ?> - <?php echo $client['name']; ?><?php endif; ?></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Refresh Media">
+	
+	<link rel="icon" href="<?php echo base_url(); ?>img/favicon.ico" type="image/x-icon"> 
+	<link rel="shortcut icon" href="<?php echo base_url(); ?>img/favicon.ico" type="image/x-icon">
+
+    <!-- Le styles -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
+	<link href="/css/magnific-popup.css?v=2" rel="stylesheet">
+	<link href='//fonts.googleapis.com/css?family=Merriweather:700italic|Open+Sans:400italic,400,700' rel='stylesheet' type='text/css'>
+	<link href="/css/style.css?v=3" rel="stylesheet">
+	<link href="/css/mobile-styles.css?v=3" rel="stylesheet">
+
+	
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+	
+	<script src="//code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+	<script src="/js/bootstrap3-typeahead.min.js"></script>
+	<script type="text/javascript" src="/js/magnific-popup.js"></script>
+
+	<link href="//code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" rel="stylesheet">
+	<script type="text/javascript" src="//code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
+	
+	<link href="/css/jquery.tagsinput.css?v=2" rel="stylesheet">
+	<script type="text/javascript" src="/js/jquery.tagsinput.js?v=2"></script>
+	
+	<script type="text/javascript">
+	var keywordLang = '<?php echo strtolower(lang('keyword')); ?>';
+	var loadingLang = '<?php echo lang('loading'); ?>';
+	</script>
+	<script type="text/javascript" src="/js/main.js?v=3"></script>
+  </head>
+  <body<?php if(@$this->client['pagination']): ?> class="pagination-enabled"<?php endif; ?>>
+
+	<div class="container top-bar">	
+		<?php if($logged_in): ?>		
+			<div class="pull-right">
+				<a class="btn btn-default" href="/users/profile/<?php echo $this->session->userdata('user_id'); ?>"><i class="glyphicon glyphicon-user"></i> <span class="no-show-mobile"><?php echo lang('menu.profile'); ?></span></a>
+				<a class="btn btn-default" href="/login/logout"><i class="glyphicon glyphicon-log-out"></i> <span class="no-show-mobile"><?php echo lang('menu.logout'); ?></span></a>
+				
+				<div class="btn-group navbar-form navbar-right">						
+					<ul class="dropdown-menu">
+					  <li><a href=""></a></li>
+					  <li class="divider"></li>
+					  <li><a href="<?php echo base_url(); ?>login/logout"><?php echo lang('menu.logout'); ?></a></li>
+					</ul>
+				</div>
+			</div>
+		<?php endif; ?>
+
+		<?php if(@$this->client['whitelabel_logo'] == 0): ?>
+		<a class="brand" href="/">
+			<img src="/img/logo-new.png?v=2" />
+		</a>
+		<?php endif; ?>
+	</div>
+  
+	<div class="navbar navbar-inverse" role="navigation">
+		<div class="container">
+				<!-- button for navigation with responsive -->
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="sr-only">Menu</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+		  
+				<?php /*if(!empty($client)): ?><small><?php echo $client['name']; ?></small><?php endif;*/ ?>
+
+				<?php /*if($this->uri->segment(1) == 'images' || $this->uri->segment(1) == 'users' || $this->uri->segment(1) == 'upload' || $this->uri->segment(1) == ''): ?> 
+					<form action="/images/search" method="post" class="navbar-search pull-right">
+						<input autocomplete="off" type="text" placeholder="Zoeken" name="keyword" value="<?php echo $this->input->post('keyword'); ?>" class="search-query span2 typeahead">
+					</form>
+				<?php endif;*/ ?>
+					
+				<div class="collapse navbar-collapse">
+
+					<ul class="nav navbar-nav">
+						<?php if($is_superadmin): ?>						
+							<li class="dropdown <?php if($this->uri->segment(1) == 'clients'): ?> active<?php endif; ?>">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+									<?php echo lang('menu.clients'); ?> <b class="caret"></b>
+								</a>
+								<ul class="dropdown-menu">
+									<li><a href="https://<?php echo $this->config->item('domain'); ?>/clients"><?php echo lang('menu.clients.overview'); ?></a></li>
+									<li class="divider"></li>
+									<?php foreach($clients as $client): ?>
+										<li<?php if($client['url'] == $client_url): ?> class="active"<?php endif; ?>><a href="https://<?php echo $client['url']; ?>.<?php echo $this->config->item('domain'); ?>"><?php echo $client['name']; ?></a></li>
+									<?php endforeach; ?>
+								</ul>
+							</li>
+							<li class="divider-vertical"></li>
+						<?php endif; ?>
+						
+						<?php if($is_client_page && !empty($this->client) && ($this->client['public'] == 1 || ($this->client['public'] == 0 && $logged_in))): ?>
+						<li<?php if(($this->uri->segment(1) == 'images' || $this->uri->segment(1) == '') && $this->uri->segment(2) == ''): ?> class="active"<?php endif; ?>>
+							<a href="/"><?php echo lang('menu.dashboard'); ?></a>
+						</li>
+						
+						<li<?php if(($this->uri->segment(1) == 'images' && $this->uri->segment(3) == 'all')): ?> class="active"<?php endif; ?>>
+							<a href="/images/index/all"><?php echo lang('menu.all'); ?></a>
+						</li>
+						<?php endif; ?>
+						
+						<?php if($logged_in && $is_client_page): ?>
+							<?php if(may_upload()): ?>
+								<li<?php if($this->uri->segment(1) == 'upload'): ?> class="active"<?php endif; ?>>
+									<a href="/upload"><?php echo lang('menu.upload'); ?></a>
+								</li>
+							<?php endif; ?>
+							
+							<?php if(is_admin()): ?>
+								<li<?php if($this->uri->segment(1) == 'users'): ?> class="active"<?php endif; ?>>
+									<a href="/users"><?php echo lang('menu.users'); ?></a>
+								</li>
+								
+								<li<?php if($this->uri->segment(1) == 'categories'): ?> class="active"<?php endif; ?>>
+									<a href="/categories"><?php echo lang('menu.categories'); ?></a>
+								</li>
+                                <?php if($this->client_id == '115'){ ?>
+                                    <li<?php if($this->uri->segment(1) == 'photobook'): ?> class="active"<?php endif; ?>>
+                                        <a href="/photobook"><?php echo lang('menu.photobook'); ?></a>
+                                    </li>
+                                <?php } ?>
+
+								<li<?php if($this->uri->segment(1) == 'settings'): ?> class="active"<?php endif; ?>>
+									<a href="/settings"><?php echo lang('menu.settings'); ?></a>
+								</li>
+							<?php endif; ?>
+						<?php endif; ?>
+						
+						<?php if(!$logged_in): ?>							
+							<li class="dropdown">
+								<a class="dropdown-toggle dropdown-login" href="#" data-toggle="dropdown"><?php echo lang('menu.login'); ?> <strong class="caret"></strong></a>
+								<div class="dropdown-menu" style="padding: 10px;min-width:240px;">
+									<form action="/login" method="post" role="form" class="form-horizontal">
+										<input class="form-control" id="username" placeholder="<?php echo lang('login.username'); ?>" name="username" type="text" style="margin-bottom:.5em">
+										<input class="form-control" id="password" placeholder="<?php echo lang('login.password'); ?>" name="password" type="password" style="margin-bottom:.5em">
+										<input class="btn btn-primary" style="margin-top:.75em;width: 100%; height: 32px; font-size: 13px;" type="submit" name="submit" value="<?php echo lang('login.submit'); ?>">
+										<?php if($is_client_page && $allow_registration): ?>
+										<a class="btn btn-default" href="/login/forgot_password" style="margin-top:.75em;width: 100%; height: 32px; font-size: 13px;"><?php echo lang('login.forgot_password'); ?></a>
+										<?php endif; ?>
+									</form>
+								</div>
+							</li>
+							
+							<?php if($is_client_page && $allow_registration): ?>
+								<li<?php if($this->uri->segment(1) == 'register'): ?> class="active"<?php endif; ?>>
+									<a href="/register"><?php echo lang('menu.register'); ?></a>
+								</li>
+							<?php endif; ?>
+						<?php endif; ?>
+					</ul>
+
+				</div><!--/.nav-collapse -->
+		</div>
+	</div>
+	
+	<?php /*<div class="row">
+		<div class="col-sm-3 col-md-3">
+			<?php if(!empty($this->client)): ?>
+				<?php $client_logo = client_logo($this->client_id); ?>
+				<?php if($client_logo): ?>
+					<div class="sub-brand-con"><a href="/"><span class="sub-brand"><img src="<?php echo $client_logo; ?>?v=<?php echo md5_file(FCPATH . $client_logo); ?>" alt="" /></span></a></div>
+				<?php else: ?>
+					<h2 class="sub-brand-title"><?php echo $this->client['name']; ?></h2>
+				<?php endif; ?>
+			<?php endif; ?>	
+		</div>
+	
+		<div class="col-sm-6 col-md-6">
+			<?php if(empty($hide_search)): ?>		
+				<form action="/images/search" method="post" style="margin-top: 20px;">
+					<div class="input-group">
+						<input autocomplete="off" type="text" class="form-control typeahead" placeholder="<?php echo lang('search.placeholder'); ?>" name="keyword" value="<?php echo @$keyword; ?>">
+						<span class="input-group-btn">
+							<button type="submit" class="btn btn-large btn-primary search-button"><i class="glyphicon glyphicon-search"></i></button>
+						</span>
+					</div>
+				</form>
+			<?php endif; ?>
+		</div>
+	</div>*/ ?>
+	
+	<?php if(empty($hide_search)): ?>		
+		<div class="jumbotron jumbotron-search<?php if(!empty($this->client['intro'])): ?> has-intro<?php endif; ?>">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-3 col-md-3">
+						<?php if(!empty($this->client)): ?>
+							<?php $client_logo = client_logo($this->client_id); ?>
+							<?php if($client_logo): ?>
+								<?php list($cwidth, $cheight) = getimagesize(FCPATH . $client_logo); ?>
+								<div class="sub-brand-con"><a href="/"><span class="sub-brand"><img src="<?php echo $client_logo; ?>?v=<?php echo md5_file(FCPATH . $client_logo); ?>" alt="" class="img-responsive" /></span></a></div>
+							<?php else: ?>
+								<h2 class="sub-brand-title"><?php echo $this->client['name']; ?></h2>
+							<?php endif; ?>
+						<?php endif; ?>	
+					</div>
+				
+					<div class="col-sm-6 col-md-6">
+						<?php $cheight_calculated = 59; ?>
+						<form action="/images/search" method="post"<?php if($client_logo): ?> style="margin-top: <?php echo round((min(50, $cheight) / 2) - (46 / 2), 2); ?>px;"<?php endif; ?>>
+							<div class="input-group">
+								<input autocomplete="off" type="text" class="form-control input-lg typeahead" placeholder="<?php echo lang('search.placeholder'); ?>" name="keyword" value="<?php echo @$keyword; ?>">
+								<span class="input-group-btn">
+									<button type="submit" class="btn btn-lg btn-primary search-button"><i class="glyphicon glyphicon-search"></i></button>
+								</span>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	<?php endif; ?>
+	
+	<?php if(!empty($this->client['intro']) && $this->uri->segment(1) == ''): ?>
+		<div class="intro-bar">
+			<div class="container">
+				<p><?php echo $this->client['intro']; ?></p>
+			</div>
+		</div>
+	<?php endif; ?>
+
+    <div class="container">
+
+		<?php if(!empty($page_title)): ?>
+		<div class="page-header">
+			<h1>
+				<?php echo $page_title; ?>
+				<?php if(!empty($page_subtitle)): ?>
+					<small><?php echo $page_subtitle; ?></small>
+				<?php endif; ?>
+			</h1>
+		</div>
+		<?php endif; ?>
+			
+		<?php $validation_errors = validation_errors('', ''); ?>
+		<?php $error_message = $this->session->flashdata('error_message'); ?>
+		<?php if(!empty($validation_errors) || !empty($errors) || !empty($error_message)): ?>
+		<div class="alert alert-danger">
+			<a class="close" data-dismiss="alert" href="#">×</a>
+			<?php if(!empty($validation_errors)) echo $validation_errors; ?>
+			<?php if(!empty($errors)) echo implode("<br />", $errors); ?>
+			<?php if(!empty($error_message)) echo $error_message; ?>
+		</div>
+		<?php endif; ?>
+		   
+		<?php $succes_message = $this->session->flashdata('succes_message'); ?>
+		<?php if($succes_message !== FALSE): ?>
+		<div class="alert alert-success">
+			<a class="close" data-dismiss="alert" href="#">×</a>
+			<?php echo $succes_message; ?>
+		</div>
+		<?php endif; ?>
+		
+		<noscript>
+			<div class="alert alert-danger">
+				Javascript moet ingeschakeld zijn om deze website te kunnen gebruiken.
+			</div>
+		</noscript>
+		
+		<?php echo $_main_content; ?>
+
+		<hr>
+		
+	  <?php if(@$this->client['whitelabel_footer'] == 0): ?>
+	   
+	   
+      <footer>
+        <p>&copy; <a href="http://www.refresh-media.nl" target="_blank">Refresh Media</a> <?php echo date("Y"); /** 2012 */ ?> - <a href="http://www.refresh-media.nl/producten/online-beeldbank" target="_blank">ImageShare</a></p>
+      
+		<?php if(!empty($this->client) && $this->client['sponser_footer'] == 1): ?>
+			<?php
+			$message = @file_get_contents("http://www.refresh-media.nl/rm-banner/message.php");
+//			$slogan_input = @file_get_contents("http://www.refresh-media.nl/slogans.txt");
+//			$slogans = explode("|", $slogan_input);
+//			shuffle($slogans);
+			?>			
+			
+			<div id="rm-outline">
+				<div id="rm-banner">
+					<span class="rm-banner-sponsor">website<br />sponsor:</span>
+					<a target="_blank" href="http://www.refresh-media.nl" class="rm-banner-logo"><img src="/img/rm-logo.png" alt="Refresh Media" /></a>
+					<span class="rm-banner-random">"<?php echo $message; ?>"</span>
+					<a target="_blank" href="http://www.refresh-media.nl" class="rm-banner-diensten">ONLINE MARKETING&nbsp;&nbsp;|&nbsp;&nbsp;APPS&nbsp;&nbsp;|&nbsp;&nbsp;WEBSITES&nbsp;&nbsp;|&nbsp;&nbsp;WEBSHOPS&nbsp;&nbsp;|&nbsp;&nbsp;WEBAPPLICATIES</span>
+				</div>
+			</div>
+	    <?php endif; ?>
+		
+	  </footer>
+	  <?php endif; ?>
+
+    </div><!--/.fluid-container-->
+
+	<div class="modal fade" id="delete-modal">
+	  <div class="modal-dialog">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h4 class="modal-title"><?php echo lang('delete_modal.title'); ?></h4>
+		  </div>
+		  <div class="modal-body">
+			<p><?php echo lang('delete_modal.description'); ?></p>
+		  </div>
+		  <div class="modal-footer">
+		  <a href="#" class="btn btn-primary" id="delete-button"><?php echo lang('delete_modal.confirm'); ?></a>
+		   <a href="#" class="btn btn-default" data-dismiss="modal"><?php echo lang('delete_modal.cancel'); ?></a>
+		  </div>
+		</div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+  </body>
+</html>

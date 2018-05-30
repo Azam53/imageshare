@@ -1,0 +1,168 @@
+body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+	  
+	  ul.thumbnails{
+		min-height: 650px;
+	  }
+	  
+	  ul.thumbnails a.thumbnail{
+		outline: none;
+	  }
+	  
+	  .thumbnails > li {
+		position: relative;
+	  }
+	  
+	  ul.thumbnails .thumbnail h5{
+		text-align: center;
+		margin: 3px 0 0 0;
+		height: 16px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		color: #0088CC;
+		white-space: nowrap;
+	  }
+	   ul.thumbnails .thumbnail .extension{
+		position: absolute;
+		top: 5px;
+		right: 5px;
+		background: rgba(255, 255, 255, .7);
+		padding: 2px 4px;
+		border-radius: 2px;
+		font-size: 11px;
+		border: 1px solid rgba(0, 0, 0, .1);
+		color: #333;
+	  }
+	  ul.thumbnails .thumbnail:hover{
+		text-decoration: none;
+		color: #0088CC;
+	  }
+	  
+	  .thumbnail > img{
+		width: 160px;
+		height: 120px;
+		display: block;
+	  }
+	  
+	  .btn-back{
+		margin: 0 0 10px 0;
+	  }
+	  
+	  .widget h2{
+		margin-bottom: 10px;
+	  }
+	  .widget h4{
+		margin-bottom: 4px;
+	  }
+	  
+	   .categories td:first-child{
+		border-top: 0;
+	   }
+	   .categories td{
+		padding: 5px 0;
+	   }
+	  .categories a{
+		font-size: 17px;
+		text-decoration: underline;
+	 }
+	 .categories td{
+		padding-left: 0;
+		padding-right: 0;
+	 }
+	 
+	 .mfp-close-btn-in .mfp-close{
+		font-size: 45px !important;
+	 }
+
+.info-info-fixed {
+    position:fixed;
+    top:155px;
+    width:324px;
+	max-height: 80%;
+    overflow: auto;
+}
+
+.pagination-enabled .info-info-fixed{
+	top: 0;
+	width: auto;
+	position: relative;
+}
+
+.radio, .checkbox{
+	cursor: pointer;
+}
+
+.alert p:last-child{
+	margin: 0;
+}
+
+.datepicker{
+	margin: 2px 0 0 0;
+}
+
+.progress{
+	width: 281px;
+	margin: 5px 0 3px 0;
+}
+
+.navbar .brand small{
+	font-size: 70%;
+}
+
+.btn-keyword{
+	margin: 0 0 5px 0;
+}
+
+#image-info.loading{
+	background-image: url('../img/loading.gif');
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+#image-info .btn-group{
+	position: static;
+}
+
+.typeahead{
+	margin-top: 0;
+}
+
+.sub-brand-con{
+	margin: 0 20px 0 0;
+}
+.sub-brand-title{
+	margin: 22px 20px 0 0;
+	min-height: 20px;
+}
+
+@media (max-width: 767px) {
+    .info-info-fixed {
+        position:static;
+        width:auto;
+		
+		
+    }
+}
+
+@media (max-width: 979px) {
+    .info-info-fixed {
+        top:70px;
+    }
+	
+	.info-info-fixed .pull-right{
+		float: left;
+		margin-bottom: 15px;
+	}
+}
+
+
+@media (max-width: 480px) {
+ul.thumbnails {
+    margin-left: -15px;
+  }
+  .thumbnails > li {
+    margin-left: 15px;
+	width: 45%;
+  }
+ }
